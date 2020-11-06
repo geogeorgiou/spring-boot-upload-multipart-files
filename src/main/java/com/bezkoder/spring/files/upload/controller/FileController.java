@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,4 +65,24 @@ public class FileController {
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
             .body(fileDB.getData());
   }
+
+  @PostMapping("/uploadToOs")
+  public ResponseEntity<?> saveFileToOs(@RequestParam("file") MultipartFile multiFile) throws IOException {
+
+    storageService.storeToOS(multiFile);
+    return ResponseEntity.ok("Successfully saved");
+
+  }
+
+  @GetMapping("/downloadFromOs")
+  public ResponseEntity<byte[]> downloadFile() throws IOException {
+    //could use uuid here to relate to file
+
+    //watch out CONTENT DISPOSITION HEADER DEMANDS an extension to work properly
+
+    return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "whatevername.pdf" + "\"")
+            .body(storageService.loadFromOS("1"));
+  }
+
 }

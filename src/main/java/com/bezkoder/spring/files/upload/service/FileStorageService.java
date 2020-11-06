@@ -12,11 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 public interface FileStorageService {
   public FileDB store(MultipartFile file) throws IOException;
 
-  public FileDB storeToOS(MultipartFile file);
+  public FileDB storeToOS(MultipartFile file) throws IOException;
 
   public FileDB getFile(String id);
 
-  public FileDB loadFromOS(String id);
+  public byte[] loadFromOS(String id) throws IOException;
 
   public Stream<FileDB> getAllFiles();
 }
